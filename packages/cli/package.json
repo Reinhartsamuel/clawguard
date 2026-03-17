@@ -1,12 +1,12 @@
 {
-  "name": "clawguard",
+  "name": "@reinhartsamuel/clawguard",
   "version": "0.1.0",
   "description": "Transparent API proxy and firewall for AI spending — budget caps, anomaly detection, loop prevention",
   "license": "MIT",
   "homepage": "https://clawguard.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/clawguard/clawguard"
+    "url": "https://github.com/Reinhartsamuel/clawguard"
   },
   "type": "module",
   "bin": {
@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "dev": "bun src/index.ts",
-    "build": "tsup src/index.ts src/commands/init.ts src/commands/start.ts src/commands/status.ts src/commands/freeze.ts src/commands/proxy.ts --format esm --target esnext --outDir dist --no-splitting --banner.js '#!/usr/bin/env node' && cp -r ../proxy/dist ./dist/proxy-runtime"
+    "build": "tsup && cp -r ../proxy/dist ./dist/proxy-runtime"
   },
   "dependencies": {
     "@clawguard/proxy": "workspace:*"

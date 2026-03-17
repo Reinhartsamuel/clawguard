@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -e
 
-REPO="clawguard/clawguard"
+REPO="Reinhartsamuel/clawguard"
 BIN_DIR="${CLAWGUARD_INSTALL:-$HOME/.local/bin}"
 BIN_NAME="clawguard"
 

@@ -25,7 +25,7 @@ ClawGuard is a transparent proxy that sits between your AI agents and cloud prov
 **Option 1 — Install script (no Bun required):**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/clawguard/clawguard/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/Reinhartsamuel/clawguard/main/install.sh | sh
 ```
 
 Downloads a pre-compiled binary for your OS/arch. No runtime dependencies.
@@ -33,7 +33,7 @@ Downloads a pre-compiled binary for your OS/arch. No runtime dependencies.
 **Option 2 — From source (requires [Bun](https://bun.sh) ≥ 1.0):**
 
 ```bash
-git clone https://github.com/clawguard/clawguard
+git clone https://github.com/Reinhartsamuel/clawguard
 cd clawguard && bun install
 bun run packages/cli/src/index.ts init
 ```

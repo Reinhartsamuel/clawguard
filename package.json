@@ -6,17 +6,17 @@
   "homepage": "https://clawguard.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/clawguard/clawguard"
+    "url": "https://github.com/Reinhartsamuel/clawguard"
   },
   "bugs": {
-    "url": "https://github.com/clawguard/clawguard/issues"
+    "url": "https://github.com/Reinhartsamuel/clawguard/issues"
   },
   "private": true,
   "type": "module",
   "workspaces": ["packages/*"],
   "scripts": {
     "dev": "bun run --filter @clawguard/proxy dev",
-    "build": "bun run --filter @clawguard/proxy build && bun run --filter @clawguard/dashboard build && bun run --filter clawguard build",
+    "build": "bun run --filter @clawguard/proxy build && bun run --filter @clawguard/dashboard build && bun run --filter @reinhartsamuel/clawguard build",
     "test": "bun run --filter '*' test",
     "lint": "tsc -b"
   },
