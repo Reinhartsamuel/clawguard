@@ -1,0 +1,29 @@
+{
+  "name": "clawguard",
+  "version": "0.1.0",
+  "description": "Transparent API proxy and firewall for AI spending — budget caps, anomaly detection, loop prevention",
+  "license": "MIT",
+  "homepage": "https://clawguard.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clawguard/clawguard"
+  },
+  "bugs": {
+    "url": "https://github.com/clawguard/clawguard/issues"
+  },
+  "private": true,
+  "type": "module",
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "dev": "bun run --filter @clawguard/proxy dev",
+    "build": "bun run --filter @clawguard/proxy build && bun run --filter @clawguard/dashboard build && bun run --filter clawguard build",
+    "test": "bun run --filter '*' test",
+    "lint": "tsc -b"
+  },
+  "engines": {
+    "bun": ">=1.0"
+  },
+  "devDependencies": {
+    "openai": "^6.27.0"
+  }
+}

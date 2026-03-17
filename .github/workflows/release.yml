@@ -1,0 +1,96 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    name: Build binary (${{ matrix.artifact }})
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            bun-target: bun-linux-x64
+            artifact: clawguard-linux-x64
+          - os: ubuntu-24.04-arm
+            bun-target: bun-linux-arm64
+            artifact: clawguard-linux-arm64
+          - os: macos-latest
+            bun-target: bun-darwin-arm64
+            artifact: clawguard-darwin-arm64
+          - os: macos-13
+            bun-target: bun-darwin-x64
+            artifact: clawguard-darwin-x64
+          - os: windows-latest
+            bun-target: bun-windows-x64
+            artifact: clawguard-windows-x64.exe
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build (proxy → dashboard → cli)
+        run: bun run build
+
+      - name: Compile single binary
+        run: |
+          bun build packages/cli/src/index.ts \
+            --compile \
+            --target ${{ matrix.bun-target }} \
+            --outfile dist/${{ matrix.artifact }}
+        shell: bash
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: dist/${{ matrix.artifact }}
+
+  release:
+    name: Publish GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/
+          merge-multiple: true
+
+      - name: Make binaries executable
+        run: chmod +x dist/clawguard-linux-* dist/clawguard-darwin-* 2>/dev/null || true
+
+      - name: Create checksums
+        run: |
+          cd dist
+          sha256sum clawguard-* > checksums.txt
+          cat checksums.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/clawguard-linux-x64
+            dist/clawguard-linux-arm64
+            dist/clawguard-darwin-arm64
+            dist/clawguard-darwin-x64
+            dist/clawguard-windows-x64.exe
+            dist/checksums.txt
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}

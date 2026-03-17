@@ -1,0 +1,1308 @@
+import { useState } from "react";
+
+const sections = [
+  "Overview",
+  "Problem",
+  "Personas",
+  "Product",
+  "Architecture",
+  "Milestones",
+];
+
+const Badge = ({ children, color = "emerald" }) => {
+  const colors = {
+    emerald: "bg-emerald-400/10 text-emerald-400 border-emerald-400/20",
+    amber: "bg-amber-400/10 text-amber-400 border-amber-400/20",
+    rose: "bg-rose-400/10 text-rose-400 border-rose-400/20",
+    sky: "bg-sky-400/10 text-sky-400 border-sky-400/20",
+    violet: "bg-violet-400/10 text-violet-400 border-violet-400/20",
+    zinc: "bg-zinc-400/10 text-zinc-400 border-zinc-400/20",
+  };
+  return (
+    <span
+      className={`inline-block px-2 py-0.5 text-xs font-medium rounded border ${colors[color]}`}
+    >
+      {children}
+    </span>
+  );
+};
+
+const SectionTitle = ({ children, sub }) => (
+  <div className="mb-6">
+    <h2
+      style={{ fontFamily: "'DM Serif Display', serif" }}
+      className="text-3xl text-white tracking-tight"
+    >
+      {children}
+    </h2>
+    {sub && <p className="text-zinc-500 text-sm mt-1">{sub}</p>}
+  </div>
+);
+
+const Card = ({ children, className = "", highlight }) => (
+  <div
+    className={`rounded-xl border border-zinc-800 bg-zinc-900/60 backdrop-blur p-5 ${highlight ? "ring-1 ring-emerald-500/30" : ""} ${className}`}
+  >
+    {children}
+  </div>
+);
+
+const StatCard = ({ value, label, color = "emerald" }) => {
+  const accents = {
+    emerald: "text-emerald-400",
+    amber: "text-amber-400",
+    rose: "text-rose-400",
+    sky: "text-sky-400",
+  };
+  return (
+    <div className="text-center">
+      <div
+        className={`text-2xl font-bold ${accents[color]}`}
+        style={{ fontFamily: "'JetBrains Mono', monospace" }}
+      >
+        {value}
+      </div>
+      <div className="text-zinc-500 text-xs mt-1">{label}</div>
+    </div>
+  );
+};
+
+// ─── SECTIONS ───
+
+function OverviewSection() {
+  return (
+    <div className="space-y-6">
+      <SectionTitle sub="Product Vision & Market Context">
+        ClawGuard
+      </SectionTitle>
+
+      <Card>
+        <div className="flex items-start gap-3 mb-4">
+          <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xl flex-shrink-0">
+            🛡️
+          </div>
+          <div>
+            <h3 className="text-white font-semibold text-lg">
+              One-Line Tagline
+            </h3>
+            <p className="text-zinc-300 mt-1">
+              The API firewall that kills catastrophic cloud bills before they
+              happen — built for the agentic AI era.
+            </p>
+          </div>
+        </div>
+      </Card>
+
+      <div className="grid grid-cols-2 gap-4">
+        <Card>
+          <div className="text-zinc-500 text-xs uppercase tracking-wider mb-2">
+            Product Type
+          </div>
+          <div className="text-white font-medium">
+            Transparent API Proxy + Dashboard
+          </div>
+          <div className="text-zinc-400 text-sm mt-1">
+            Self-hosted or managed SaaS. Sits between your agents/apps and cloud
+            AI providers. Zero code changes required.
+          </div>
+        </Card>
+        <Card>
+          <div className="text-zinc-500 text-xs uppercase tracking-wider mb-2">
+            Revenue Model
+          </div>
+          <div className="text-white font-medium">
+            Freemium + Usage-Based Tiers
+          </div>
+          <div className="text-zinc-400 text-sm mt-1">
+            Free self-hosted (OSS core). Managed SaaS: $0 up to $500/mo API
+            passthrough, then 1.5% of protected spend.
+          </div>
+        </Card>
+      </div>
+
+      <Card>
+        <div className="text-zinc-500 text-xs uppercase tracking-wider mb-3">
+          Why Now — The 2026 Convergence
+        </div>
+        <div className="grid grid-cols-1 gap-3">
+          {[
+            {
+              icon: "🦞",
+              title: "OpenClaw Explosion",
+              desc: "247K+ GitHub stars, 1.6M npm installs. Millions of new users are configuring raw API keys for the first time — with agents that run 24/7, autonomously making API calls.",
+              badge: "Market Trigger",
+              color: "emerald",
+            },
+            {
+              icon: "🔥",
+              title: "Catastrophic Bill Events",
+              desc: 'The r/googlecloud $82K incident is the tip of the iceberg. OpenClaw community reports $200/day runaway loops, $3,600/mo bills, and "woke up to a bill that exceeds our bank account." Cloud providers refuse to waive under Shared Responsibility.',
+              badge: "Pain Signal",
+              color: "rose",
+            },
+            {
+              icon: "🔓",
+              title: "Credential Leak Epidemic",
+              desc: "Snyk found 7.1% of ClawHub skills leak credentials. 30,000+ exposed OpenClaw instances online. Bitsight, Cisco, and Google's own VP have publicly flagged the security crisis.",
+              badge: "Security Gap",
+              color: "amber",
+            },
+            {
+              icon: "🤖",
+              title: "Agentic AI Goes Mainstream",
+              desc: "Claude Cowork, OpenAI Codex agents, Gemini agents — every major provider is shipping autonomous agents. The API-key-as-attack-surface problem only grows from here.",
+              badge: "Macro Trend",
+              color: "sky",
+            },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="flex items-start gap-3 p-3 rounded-lg bg-zinc-800/50"
+            >
+              <div className="text-xl flex-shrink-0 mt-0.5">{item.icon}</div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-white font-medium text-sm">
+                    {item.title}
+                  </span>
+                  <Badge color={item.color}>{item.badge}</Badge>
+                </div>
+                <p className="text-zinc-400 text-sm mt-1">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <Card>
+        <div className="text-zinc-500 text-xs uppercase tracking-wider mb-3">
+          OpenClaw Integration Strategy
+        </div>
+        <p className="text-zinc-300 text-sm mb-3">
+          ClawGuard ships as an <strong className="text-white">OpenClaw skill</strong> and a <strong className="text-white">standalone proxy</strong>.
+          The skill auto-configures the proxy as the model provider endpoint. One command: <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-xs">openclaw skill install clawguard</code>. This captures the OpenClaw wave at the exact moment users are panicking about costs.
+        </p>
+        <div className="flex gap-2 flex-wrap">
+          <Badge color="emerald">OpenClaw Skill</Badge>
+          <Badge color="sky">Docker Compose</Badge>
+          <Badge color="violet">npm package</Badge>
+          <Badge color="zinc">Managed SaaS</Badge>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+function ProblemSection() {
+  return (
+    <div className="space-y-6">
+      <SectionTitle sub="Problem Definition & Competitive Landscape">
+        The Problem
+      </SectionTitle>
+
+      <Card className="border-rose-500/30">
+        <div className="text-rose-400 text-xs uppercase tracking-wider mb-3">
+          The $82,000 Wake-Up Call
+        </div>
+        <p className="text-zinc-300 text-sm leading-relaxed">
+          A 3-person startup in Mexico had their Google Cloud API key
+          compromised. In 48 hours, attackers racked up $82,314 in Gemini API
+          charges — 455x their normal $180/month spend. Google cited "Shared
+          Responsibility" and insisted on payment. The company faces bankruptcy.
+        </p>
+        <div className="grid grid-cols-4 gap-4 mt-4 pt-4 border-t border-zinc-800">
+          <StatCard value="$82K" label="in 48 hours" color="rose" />
+          <StatCard value="455×" label="normal spend" color="amber" />
+          <StatCard value="$180" label="normal monthly" color="sky" />
+          <StatCard value="0" label="guardrails triggered" color="rose" />
+        </div>
+      </Card>
+
+      <Card>
+        <div className="text-zinc-500 text-xs uppercase tracking-wider mb-3">
+          The Poster Author's Own Diagnosis
+        </div>
+        <p className="text-zinc-400 text-sm italic mb-3">
+          "Why are there no basic guardrails for catastrophic usage anomalies?"
+        </p>
+        <div className="space-y-2">
+          {[
+            "No automatic hard stop at 5× or 10× historical usage",
+            "No forced confirmation on extreme spikes",
+            "No temporary freeze pending review",
+            "No default per-API spending caps",
+          ].map((item, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-rose-400 flex-shrink-0" />
+              <span className="text-zinc-300 text-sm">{item}</span>
+            </div>
+          ))}
+        </div>
+        <p className="text-zinc-500 text-xs mt-3">
+          — u/RatonVaquero, r/googlecloud, Feb 2026
+        </p>
+      </Card>
+
+      <Card>
+        <div className="text-zinc-500 text-xs uppercase tracking-wider mb-3">
+          Why Cloud Providers Won't Fix This
+        </div>
+        <div className="grid grid-cols-1 gap-3">
+          {[
+            {
+              provider: "Google Cloud",
+              reason:
+                "Budget alerts are advisory-only; no hard stops. Billing alerts can take 12+ hours to fire. Shared Responsibility Model means stolen-key charges are your problem.",
+            },
+            {
+              provider: "AWS / Bedrock",
+              reason:
+                "Service quotas exist but are throughput-based (requests/min), not cost-based. No anomaly detection on spend velocity. IAM is powerful but complex.",
+            },
+            {
+              provider: "OpenAI",
+              reason:
+                "Monthly spend caps exist but are static and per-org. No per-key limits, no anomaly detection, no velocity-based circuit breaking.",
+            },
+            {
+              provider: "Anthropic",
+              reason:
+                "Usage limits available at the organization level. But no per-key spending controls, no real-time anomaly detection for stolen keys.",
+            },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="p-3 rounded-lg bg-zinc-800/50 flex items-start gap-3"
+            >
+              <div className="text-white font-medium text-sm min-w-28 flex-shrink-0">
+                {item.provider}
+              </div>
+              <div className="text-zinc-400 text-sm">{item.reason}</div>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <Card>
+        <div className="text-zinc-500 text-xs uppercase tracking-wider mb-3">
+          Competitive Landscape
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-zinc-500 text-xs uppercase tracking-wider border-b border-zinc-800">
+                <th className="text-left py-2 pr-3">Solution</th>
+                <th className="text-center py-2 px-2">Hard Caps</th>
+                <th className="text-center py-2 px-2">Anomaly Detect</th>
+                <th className="text-center py-2 px-2">Loop Kill</th>
+                <th className="text-center py-2 px-2">Multi-Provider</th>
+                <th className="text-center py-2 px-2">OpenClaw Native</th>
+              </tr>
+            </thead>
+            <tbody className="text-zinc-300">
+              {[
+                ["TokPinch", "✓", "~", "✓", "~", "✓"],
+                ["ClawMetry", "✗", "✗", "✗", "✗", "✓"],
+                ["Tokscale", "~", "✗", "✗", "✗", "~"],
+                ["Helicone", "✗", "~", "✗", "✓", "✗"],
+                ["LiteLLM Proxy", "~", "✗", "✗", "✓", "~"],
+                [
+                  "ClawGuard (ours)",
+                  "✓✓",
+                  "✓✓",
+                  "✓✓",
+                  "✓✓",
+                  "✓✓",
+                ],
+              ].map((row, i) => (
+                <tr
+                  key={i}
+                  className={`border-b border-zinc-800/50 ${i === 5 ? "bg-emerald-500/5 font-medium" : ""}`}
+                >
+                  <td className={`py-2 pr-3 ${i === 5 ? "text-emerald-400" : ""}`}>
+                    {row[0]}
+                  </td>
+                  {row.slice(1).map((cell, j) => (
+                    <td
+                      key={j}
+                      className={`text-center py-2 px-2 ${
+                        cell === "✓✓"
+                          ? "text-emerald-400"
+                          : cell === "✓"
+                            ? "text-emerald-400/60"
+                            : cell === "~"
+                              ? "text-amber-400/60"
+                              : "text-zinc-600"
+                      }`}
+                    >
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="text-zinc-500 text-xs mt-3">
+          ✓✓ = best-in-class &nbsp; ✓ = has it &nbsp; ~ = partial &nbsp; ✗ =
+          missing
+        </p>
+      </Card>
+    </div>
+  );
+}
+
+function PersonasSection() {
+  const personas = [
+    {
+      emoji: "🦞",
+      name: "Ravi — The OpenClaw Builder",
+      age: "28",
+      role: "Indie developer, solo/2-person team",
+      location: "Bangalore, India",
+      color: "emerald",
+      quote:
+        "I spent 3 days setting up OpenClaw and burned through $50 in tokens before I realized it was looping.",
+      context:
+        "Discovered OpenClaw through TikTok demos in late January 2026. Running it on a Raspberry Pi connected to WhatsApp and Telegram. Using Anthropic Claude via API key stored in config.json5. Has 3 active agents: a Reddit digest bot, a customer support responder, and a code reviewer.",
+      painPoints: [
+        "No visibility into per-agent API costs until the monthly bill arrives",
+        "Heartbeat loops burned $40 overnight once — had to manually kill the process",
+        "Stores API keys in plaintext config; knows it's bad but doesn't know what else to do",
+        "Can't afford a $200 surprise bill — monthly API budget is $30-50",
+      ],
+      goals: [
+        "Hard per-agent spending caps that actually stop requests",
+        "Instant Telegram alert when anomalous spending starts",
+        "One-command setup that works with his existing OpenClaw config",
+        "Dashboard to see which agent/skill is burning the most tokens",
+      ],
+      techComfort: "High (can write code) but low security expertise",
+    },
+    {
+      emoji: "🏢",
+      name: "Sofia — The Startup CTO",
+      age: "34",
+      role: "CTO at 12-person SaaS startup",
+      location: "Mexico City, Mexico",
+      color: "rose",
+      quote:
+        "If Google enforces even a third of this amount, our company goes bankrupt. We are 3 developers.",
+      context:
+        "Directly modeled on the r/googlecloud poster. Small team using Google Cloud + Gemini APIs for their product. Normal spend is $180/month. API key was compromised and generated $82K in charges in 48 hours. Filed FBI cybercrime report. Google citing Shared Responsibility.",
+      painPoints: [
+        "No anomaly detection — 455× spike wasn't caught by any Google Cloud feature",
+        "Budget alerts are advisory and lagged — by the time they fired, the damage was done",
+        "Shared Responsibility Model means the provider won't absorb the cost",
+        "Team is too small to build internal monitoring infrastructure",
+        "The $82K bill literally exceeds their bank account",
+      ],
+      goals: [
+        "Circuit breaker that auto-kills API access at 5×-10× historical usage",
+        "Per-key spending caps that are hard limits, not suggestions",
+        "Instant freeze + human confirmation before allowing anomalous spend",
+        "Audit trail that proves unauthorized access for dispute/legal proceedings",
+        "Something that would have prevented this from happening",
+      ],
+      techComfort: "High — full-stack dev, but no dedicated security/DevOps person",
+    },
+    {
+      emoji: "🧑‍💻",
+      name: "Marcus — The Vibe Coder",
+      age: "22",
+      role: "Student / side-project builder",
+      location: "Austin, TX",
+      color: "sky",
+      quote:
+        "I just want to build cool stuff with AI. I don't want to think about billing.",
+      context:
+        "Building AI-powered projects for fun and portfolio. Uses OpenAI, Anthropic, and Google APIs across different projects. Discovered OpenClaw through the DataCamp article and is experimenting. Running 2-3 side projects simultaneously with separate API keys. Total monthly budget: $20.",
+      painPoints: [
+        "Forgot to turn off a test workflow; ran up $15 in a weekend",
+        "Has API keys in 4 different .env files across projects — no central view",
+        "Can't distinguish legitimate high-usage from a leak",
+        "Checking 3 different provider dashboards to track spending is painful",
+      ],
+      goals: [
+        "Single dashboard across all providers (OpenAI + Anthropic + Google)",
+        "Automatic pause when any project exceeds its weekly budget",
+        "Simple setup — ideally just change the API base URL in .env",
+        "Free tier that covers his modest usage",
+      ],
+      techComfort:
+        "Medium — can follow tutorials, comfortable with env vars and Docker Compose",
+    },
+    {
+      emoji: "🏗️",
+      name: "Chen — The Platform Engineer",
+      age: "38",
+      role: "Platform/DevOps at a 200-person company",
+      location: "San Francisco, CA",
+      color: "violet",
+      quote:
+        "We have 40 developers using AI APIs. I need to manage this before someone's leaked key becomes a P0 incident.",
+      context:
+        "Company adopted AI aggressively. Teams use Claude, GPT-4, Gemini across internal tools, customer-facing products, and now some teams are experimenting with OpenClaw for internal automation. He's responsible for cloud security and cost management.",
+      painPoints: [
+        "No centralized policy enforcement for AI API keys across teams",
+        "Can't enforce per-team or per-project spending limits at the API level",
+        "Leaked keys in Git repos are a recurring problem",
+        "No way to detect if a key is being used from an unusual IP/geography",
+      ],
+      goals: [
+        "Centralized API key vault with rotation and scoped access",
+        "Per-team, per-project, per-key spending policies",
+        "Geo-fencing and IP allowlisting for API requests",
+        "SSO/RBAC integration, audit logs, compliance reports",
+        "Self-hosted option for data sovereignty requirements",
+      ],
+      techComfort: "Expert — Kubernetes, Terraform, the whole stack",
+    },
+  ];
+
+  const [activePersona, setActivePersona] = useState(0);
+  const p = personas[activePersona];
+  const colorMap = {
+    emerald: {
+      bg: "bg-emerald-500/10",
+      border: "border-emerald-500/30",
+      text: "text-emerald-400",
+      ring: "ring-emerald-500/40",
+    },
+    rose: {
+      bg: "bg-rose-500/10",
+      border: "border-rose-500/30",
+      text: "text-rose-400",
+      ring: "ring-rose-500/40",
+    },
+    sky: {
+      bg: "bg-sky-500/10",
+      border: "border-sky-500/30",
+      text: "text-sky-400",
+      ring: "ring-sky-500/40",
+    },
+    violet: {
+      bg: "bg-violet-500/10",
+      border: "border-violet-500/30",
+      text: "text-violet-400",
+      ring: "ring-violet-500/40",
+    },
+  };
+  const c = colorMap[p.color];
+
+  return (
+    <div className="space-y-6">
+      <SectionTitle sub="Who We're Building For">User Personas</SectionTitle>
+
+      <div className="flex gap-2 flex-wrap">
+        {personas.map((persona, i) => (
+          <button
+            key={i}
+            onClick={() => setActivePersona(i)}
+            className={`px-3 py-2 rounded-lg text-sm transition-all ${
+              i === activePersona
+                ? `${colorMap[persona.color].bg} ${colorMap[persona.color].text} ring-1 ${colorMap[persona.color].ring}`
+                : "bg-zinc-800/50 text-zinc-400 hover:text-zinc-300"
+            }`}
+          >
+            {persona.emoji} {persona.name.split("—")[0].trim()}
+          </button>
+        ))}
+      </div>
+
+      <Card className={c.border}>
+        <div className="flex items-start gap-4 mb-4">
+          <div className="text-4xl">{p.emoji}</div>
+          <div>
+            <h3 className={`text-lg font-semibold ${c.text}`}>{p.name}</h3>
+            <div className="flex gap-3 text-zinc-500 text-xs mt-1">
+              <span>Age {p.age}</span>
+              <span>•</span>
+              <span>{p.role}</span>
+              <span>•</span>
+              <span>{p.location}</span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className={`p-3 rounded-lg ${c.bg} border ${c.border} mb-4`}
+        >
+          <p className={`text-sm italic ${c.text}`}>"{p.quote}"</p>
+        </div>
+
+        <div className="mb-4">
+          <div className="text-zinc-500 text-xs uppercase tracking-wider mb-2">
+            Context
+          </div>
+          <p className="text-zinc-300 text-sm leading-relaxed">{p.context}</p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <div className="text-rose-400 text-xs uppercase tracking-wider mb-2">
+              Pain Points
+            </div>
+            <div className="space-y-2">
+              {p.painPoints.map((point, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-rose-400 mt-1.5 flex-shrink-0" />
+                  <span className="text-zinc-400 text-xs leading-relaxed">
+                    {point}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="text-emerald-400 text-xs uppercase tracking-wider mb-2">
+              Goals
+            </div>
+            <div className="space-y-2">
+              {p.goals.map((goal, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0" />
+                  <span className="text-zinc-400 text-xs leading-relaxed">
+                    {goal}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4 pt-3 border-t border-zinc-800">
+          <div className="text-zinc-500 text-xs">
+            <strong className="text-zinc-400">Tech Comfort:</strong>{" "}
+            {p.techComfort}
+          </div>
+        </div>
+      </Card>
+
+      <Card>
+        <div className="text-zinc-500 text-xs uppercase tracking-wider mb-3">
+          Persona Priority Matrix
+        </div>
+        <div className="space-y-2">
+          {[
+            {
+              name: "Ravi (OpenClaw Builder)",
+              priority: "P0 — Launch Target",
+              color: "emerald",
+              reason:
+                "Largest addressable audience. 247K GitHub stars = massive top-of-funnel. OpenClaw skill = viral distribution.",
+            },
+            {
+              name: "Marcus (Vibe Coder)",
+              priority: "P0 — Launch Target",
+              color: "sky",
+              reason:
+                "Overlapping needs with Ravi. Free tier captures this segment. Grows into paid as projects scale.",
+            },
+            {
+              name: "Sofia (Startup CTO)",
+              priority: "P1 — Month 2",
+              color: "rose",
+              reason:
+                "Highest willingness-to-pay. The $82K story is our marketing narrative. Needs audit trail features.",
+            },
+            {
+              name: "Chen (Platform Eng)",
+              priority: "P2 — Quarter 2",
+              color: "violet",
+              reason:
+                "Enterprise features (SSO, RBAC, multi-team). Longest sales cycle but highest LTV.",
+            },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="flex items-start gap-3 p-3 rounded-lg bg-zinc-800/30"
+            >
+              <Badge color={item.color}>{item.priority}</Badge>
+              <div className="flex-1">
+                <span className="text-white text-sm font-medium">
+                  {item.name}
+                </span>
+                <p className="text-zinc-500 text-xs mt-0.5">{item.reason}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+function ProductSection() {
+  return (
+    <div className="space-y-6">
+      <SectionTitle sub="Features, UX, and Differentiation">
+        Product Specification
+      </SectionTitle>
+
+      <Card highlight>
+        <div className="text-emerald-400 text-xs uppercase tracking-wider mb-3">
+          Core Value Proposition
+        </div>
+        <p className="text-white text-lg font-medium mb-2">
+          "Every guardrail the Reddit poster wished existed — as a single
+          installable product."
+        </p>
+        <p className="text-zinc-400 text-sm">
+          ClawGuard directly implements each missing guardrail cited in the viral
+          post: automatic hard stops on anomalous spend, forced confirmation on
+          extreme spikes, temporary freeze pending review, and default per-API
+          spending caps.
+        </p>
+      </Card>
+
+      {/* Feature Blocks */}
+      {[
+        {
+          title: "1. Anomaly-Based Circuit Breaker",
+          reddit: "No automatic hard stop at 5× or 10× historical usage",
+          features: [
+            {
+              name: "Adaptive Baseline",
+              desc: "Learns your normal spend pattern over a rolling 14-day window. Calculates hourly, daily, and weekly baselines with standard deviation bands.",
+            },
+            {
+              name: "Configurable Trip Thresholds",
+              desc: "Default: WARN at 3×, PAUSE at 5×, KILL at 10× of baseline. Fully configurable per-key, per-agent, per-provider.",
+            },
+            {
+              name: "Velocity Detection",
+              desc: "Monitors spend-per-minute acceleration. A jump from $0.02/min to $5/min triggers before absolute thresholds are hit. Catches attacks in the first minutes, not hours.",
+            },
+            {
+              name: "Zero-Lag Enforcement",
+              desc: "Decisions are made in the proxy hot path (<5ms latency added). No waiting for billing APIs to update. Real-time token counting on every response.",
+            },
+          ],
+        },
+        {
+          title: "2. Spike Confirmation Gate",
+          reddit: "No forced confirmation on extreme spikes",
+          features: [
+            {
+              name: "Human-in-the-Loop Pause",
+              desc: "When a spike is detected, requests are queued (not dropped) and the owner gets an instant notification via Telegram, Slack, SMS, or email.",
+            },
+            {
+              name: "One-Tap Resume/Kill",
+              desc: "Notification includes approve/deny buttons. Approve resumes the queue. Deny kills all pending requests and rotates the key.",
+            },
+            {
+              name: "Auto-Expire Pause",
+              desc: "If no human responds within configurable window (default: 15 min), requests are denied. Fail-closed, not fail-open.",
+            },
+            {
+              name: "Context in Alert",
+              desc: "Alert includes: which key, which agent/IP, request volume, estimated cost so far, and top requesting IPs for quick triage.",
+            },
+          ],
+        },
+        {
+          title: "3. Automatic Freeze & Review",
+          reddit: "No temporary freeze pending review",
+          features: [
+            {
+              name: "Instant Key Freeze",
+              desc: "Proxy-level block — frozen keys get 429 responses immediately. No need to go to the provider console. Works across all providers simultaneously.",
+            },
+            {
+              name: "Forensic Snapshot",
+              desc: "On freeze, captures: full request log (last 1000 requests), IP addresses, user agents, geographic origins, request patterns, and estimated total damage.",
+            },
+            {
+              name: "Automated Key Rotation",
+              desc: "Integrates with provider APIs to auto-rotate compromised keys and update your OpenClaw config / environment variables in-place.",
+            },
+            {
+              name: "Incident Report Generation",
+              desc: "Auto-generates a PDF incident report with timeline, evidence, and impact analysis — ready for provider dispute or insurance claim.",
+            },
+          ],
+        },
+        {
+          title: "4. Per-Key Spending Caps",
+          reddit: "No default per-API spending caps",
+          features: [
+            {
+              name: "Granular Budget Hierarchy",
+              desc: "Set hard caps at any level: per-key, per-agent, per-project, per-provider, per-team. Caps are composable — a key cap of $10/day inside a project cap of $50/day.",
+            },
+            {
+              name: "Time-Window Budgets",
+              desc: "Hourly, daily, weekly, monthly windows. Rolling or calendar-aligned. Auto-resets at window boundary.",
+            },
+            {
+              name: "Hard vs. Soft Limits",
+              desc: "Soft limit = alert + continue. Hard limit = instant block. Configure independently per cap level.",
+            },
+            {
+              name: "Budget Forecasting",
+              desc: "Projects current-rate spend to end-of-period. Warns if you're on pace to exceed budget before the window closes.",
+            },
+          ],
+        },
+        {
+          title: "5. Loop & Runaway Detection (OpenClaw-Specific)",
+          reddit: "OpenClaw heartbeat storms burning $200/night",
+          features: [
+            {
+              name: "Content Fingerprinting",
+              desc: "Hashes first 200 chars of each request. If same hash appears 5+ times in 5 minutes → pause with exponential backoff.",
+            },
+            {
+              name: "Heartbeat Storm Detection",
+              desc: "Detects OpenClaw heartbeat patterns (10+ in 10 min). Auto-pauses the offending session, not the entire key.",
+            },
+            {
+              name: "Cost Spiral Brake",
+              desc: "More than $2 in a 5-minute window from a single session → automatic pause. Configurable thresholds.",
+            },
+            {
+              name: "Smart Model Downgrade",
+              desc: "Optional: auto-routes low-value requests (heartbeats, short pings) from Opus/GPT-4 to Haiku/Flash. Saves 60-80% on routine traffic.",
+            },
+          ],
+        },
+      ].map((section, i) => (
+        <Card key={i}>
+          <h3 className="text-white font-semibold text-sm mb-1">
+            {section.title}
+          </h3>
+          <div className="text-rose-400/80 text-xs italic mb-3">
+            Addresses: "{section.reddit}"
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {section.features.map((f, j) => (
+              <div key={j} className="p-3 rounded-lg bg-zinc-800/40">
+                <div className="text-emerald-400 text-xs font-medium mb-1">
+                  {f.name}
+                </div>
+                <p className="text-zinc-400 text-xs leading-relaxed">
+                  {f.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Card>
+      ))}
+
+      <Card>
+        <div className="text-zinc-500 text-xs uppercase tracking-wider mb-3">
+          Dashboard UX Principles
+        </div>
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            {
+              icon: "⚡",
+              title: "Glanceable",
+              desc: "4 stat cards at top: total spend today, active keys, alerts, and burn rate. Know your status in 2 seconds.",
+            },
+            {
+              icon: "🎯",
+              title: "Action-First",
+              desc: "Every alert has a one-click action: Freeze, Resume, Rotate, Investigate. No navigating through menus.",
+            },
+            {
+              icon: "📱",
+              title: "Mobile-Native Alerts",
+              desc: "Telegram bot as primary alert channel (mirrors OpenClaw's own UX pattern). Also: Slack, SMS, email, webhooks.",
+            },
+          ].map((item, i) => (
+            <div key={i} className="p-3 rounded-lg bg-zinc-800/40 text-center">
+              <div className="text-2xl mb-2">{item.icon}</div>
+              <div className="text-white text-sm font-medium mb-1">
+                {item.title}
+              </div>
+              <p className="text-zinc-500 text-xs">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+function ArchitectureSection() {
+  return (
+    <div className="space-y-6">
+      <SectionTitle sub="Infrastructure & Software Architecture">
+        System Architecture
+      </SectionTitle>
+
+      <Card>
+        <div className="text-zinc-500 text-xs uppercase tracking-wider mb-4">
+          High-Level Data Flow
+        </div>
+        <div
+          className="font-mono text-xs leading-relaxed p-4 rounded-lg bg-zinc-950 border border-zinc-800 overflow-x-auto"
+          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+        >
+          <pre className="text-zinc-400">{`
+┌─────────────────┐      ┌──────────────────────────────────────────────┐
+│   YOUR AGENTS   │      │              CLAWGUARD PROXY                 │
+│                 │      │                                              │
+│  OpenClaw ──────┼──┐   │  ┌──────────┐  ┌───────────┐  ┌─────────┐  │
+│  Claude Code ───┼──┤   │  │  Ingress  │→ │  Policy   │→ │ Egress  │  │
+│  Custom App ────┼──┼──→│  │  Router   │  │  Engine   │  │ Router  │──┼──→ Provider APIs
+│  CI/CD ─────────┼──┤   │  └──────────┘  └─────┬─────┘  └─────────┘  │    (OpenAI,
+│  Any HTTP ──────┼──┘   │                      │                      │     Anthropic,
+│   Client        │      │              ┌───────┴───────┐              │     Google,
+└─────────────────┘      │              │               │              │     Bedrock...)
+                         │        ┌─────┴─────┐  ┌──────┴──────┐      │
+                         │        │  Anomaly   │  │   Budget    │      │
+                         │        │  Detector  │  │   Enforcer  │      │
+                         │        └─────┬─────┘  └──────┬──────┘      │
+                         │              │               │              │
+                         │        ┌─────┴───────────────┴──────┐      │
+                         │        │      State Store (SQLite)   │      │
+                         │        │  - Request log (ring buf)   │      │
+                         │        │  - Spend counters           │      │
+                         │        │  - Baseline models          │      │
+                         │        │  - Session fingerprints     │      │
+                         │        └─────────────┬──────────────┘      │
+                         │                      │                      │
+                         │        ┌─────────────┴──────────────┐      │
+                         │        │     Alert Dispatcher        │      │
+                         │        │  Telegram│Slack│SMS│Webhook │      │
+                         │        └────────────────────────────┘      │
+                         │                                              │
+                         │        ┌────────────────────────────┐      │
+                         │        │   Dashboard (React + WS)    │      │
+                         │        │   :4200                     │      │
+                         │        └────────────────────────────┘      │
+                         └──────────────────────────────────────────────┘
+`}</pre>
+        </div>
+      </Card>
+
+      <Card>
+        <div className="text-zinc-500 text-xs uppercase tracking-wider mb-3">
+          Component Breakdown
+        </div>
+        <div className="space-y-4">
+          {[
+            {
+              name: "Ingress Router",
+              tech: "Node.js (Hono framework)",
+              desc: "Accepts requests on OpenAI-compatible /v1/chat/completions endpoint. Identifies the API key, resolves it to a project/agent/team context. Adds request to the processing pipeline. < 1ms overhead.",
+              badge: "Hot Path",
+              color: "rose",
+            },
+            {
+              name: "Policy Engine",
+              tech: "TypeScript, in-memory rule evaluator",
+              desc: "Evaluates all active policies in sequence: budget caps → anomaly thresholds → loop detection → geo-fence → rate limits. Returns ALLOW, WARN, PAUSE, or DENY. Rules are loaded from config and cached. Sub-millisecond evaluation.",
+              badge: "Core",
+              color: "emerald",
+            },
+            {
+              name: "Anomaly Detector",
+              tech: "Exponential moving average + z-score",
+              desc: "Maintains per-key spend baselines using EMA with configurable decay. Computes z-scores for current spend velocity. Triggers at configurable sigma thresholds (default: 2σ warn, 3σ pause, 5σ kill). No ML needed — statistical methods are faster and more predictable.",
+              badge: "Intelligence",
+              color: "amber",
+            },
+            {
+              name: "Budget Enforcer",
+              tech: "Sliding window counters (Redis-like, in-process)",
+              desc: "Tracks spend across configurable time windows using a circular buffer of minute-granularity buckets. Supports hierarchical caps: key < project < team < org. Atomic increment-and-check on every request.",
+              badge: "Enforcement",
+              color: "sky",
+            },
+            {
+              name: "State Store",
+              tech: "SQLite (better-sqlite3) + WAL mode",
+              desc: "Persists request metadata (not content), spend counters, baseline models, and alert history. Ring buffer for last 10,000 requests per key. WAL mode enables concurrent reads during writes. ~0 ops overhead.",
+              badge: "Storage",
+              color: "zinc",
+            },
+            {
+              name: "Alert Dispatcher",
+              tech: "Event-driven, pluggable transports",
+              desc: "Publishes alerts to configured channels: Telegram Bot API, Slack webhook, Twilio SMS, email (SMTP), generic webhook. Includes interactive buttons (Telegram inline keyboard / Slack Block Kit) for approve/deny actions.",
+              badge: "Notification",
+              color: "violet",
+            },
+            {
+              name: "Dashboard",
+              tech: "React + Tailwind + WebSocket (real-time)",
+              desc: "Real-time dashboard served from the proxy process. WebSocket for live updates. Views: Overview (stat cards + charts), Keys (per-key detail), Alerts (timeline), Sessions (per-agent), Settings (policy config). Dark theme, responsive.",
+              badge: "UI",
+              color: "emerald",
+            },
+            {
+              name: "Egress Router",
+              tech: "Fetch + streaming support",
+              desc: "Forwards approved requests to the actual provider API. Supports streaming (SSE) responses — tokens are counted as they stream back. Handles provider failover if configured. Injects response metadata (cost estimate) into headers.",
+              badge: "Hot Path",
+              color: "rose",
+            },
+          ].map((comp, i) => (
+            <div
+              key={i}
+              className="p-4 rounded-lg bg-zinc-800/40 flex items-start gap-4"
+            >
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                  <span className="text-white font-medium text-sm">
+                    {comp.name}
+                  </span>
+                  <Badge color={comp.color}>{comp.badge}</Badge>
+                  <span className="text-zinc-600 text-xs">{comp.tech}</span>
+                </div>
+                <p className="text-zinc-400 text-xs leading-relaxed">
+                  {comp.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <Card>
+        <div className="text-zinc-500 text-xs uppercase tracking-wider mb-3">
+          Deployment Options
+        </div>
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            {
+              mode: "Self-Hosted (OSS)",
+              target: "Ravi, Marcus",
+              how: "npx clawguard or Docker Compose. Single binary. SQLite storage. Zero external dependencies.",
+              infra: "Any machine: RPi, VPS, laptop. ~50MB RAM.",
+            },
+            {
+              mode: "OpenClaw Skill",
+              target: "All OpenClaw users",
+              how: "openclaw skill install clawguard. Auto-configures proxy as model provider. Inherits OpenClaw's config system.",
+              infra: "Runs within existing OpenClaw process.",
+            },
+            {
+              mode: "Managed SaaS",
+              target: "Sofia, Chen",
+              how: "Sign up → get proxy URL → set as API base. We run the infra. SOC2, SLAs, multi-region.",
+              infra: "Cloudflare Workers + D1 (SQLite at edge). Global latency < 10ms added.",
+            },
+          ].map((opt, i) => (
+            <div key={i} className="p-3 rounded-lg bg-zinc-800/40">
+              <div className="text-white text-sm font-medium mb-1">
+                {opt.mode}
+              </div>
+              <div className="text-zinc-500 text-xs mb-2">
+                Target: {opt.target}
+              </div>
+              <p className="text-zinc-400 text-xs mb-2">{opt.how}</p>
+              <div className="text-zinc-600 text-xs italic">{opt.infra}</div>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <Card>
+        <div className="text-zinc-500 text-xs uppercase tracking-wider mb-3">
+          Technology Stack Summary
+        </div>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
+          {[
+            ["Runtime", "Node.js ≥ 22 (matches OpenClaw req)"],
+            ["HTTP Framework", "Hono (ultra-fast, 0-dep, Workers-compatible)"],
+            ["Language", "TypeScript (strict mode)"],
+            ["Storage", "SQLite via better-sqlite3 (WAL mode)"],
+            ["Dashboard", "React 19 + Tailwind + Recharts"],
+            ["Real-Time", "WebSocket (native, no Socket.io)"],
+            ["Alerts", "Telegram Bot API, Slack, Twilio, SMTP, Webhook"],
+            ["Packaging", "npm + Docker + OpenClaw skill manifest"],
+            ["CI/CD", "GitHub Actions, semantic-release"],
+            ["Managed Infra", "Cloudflare Workers + D1 + R2"],
+            ["Monitoring", "OpenTelemetry export (optional)"],
+            ["License", "MIT (core) + BSL (enterprise features)"],
+          ].map(([key, val], i) => (
+            <div key={i} className="flex gap-2 py-1 border-b border-zinc-800/50">
+              <span className="text-zinc-500 min-w-28">{key}</span>
+              <span className="text-zinc-300">{val}</span>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <Card>
+        <div className="text-zinc-500 text-xs uppercase tracking-wider mb-3">
+          Security Architecture
+        </div>
+        <div className="space-y-2 text-xs">
+          {[
+            "API keys are never logged or stored — proxy passes them through to providers without persistence",
+            "Request content (prompts/completions) is never stored — only metadata: timestamps, token counts, cost estimates, IP, session ID",
+            "SQLite is encrypted at rest (sqlcipher) in managed SaaS deployment",
+            "Dashboard access requires auth token (generated on first run) or SSO (enterprise)",
+            "Alert channels use one-time approval tokens — Telegram inline buttons use signed callback payloads",
+            "All provider API communication is TLS-only — proxy verifies provider certificates",
+            "Self-hosted mode: no data leaves your machine, ever",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 text-zinc-400">
+              <span className="text-emerald-400 mt-0.5">✓</span>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+function MilestonesSection() {
+  return (
+    <div className="space-y-6">
+      <SectionTitle sub="Roadmap & Go-To-Market">
+        Build Milestones
+      </SectionTitle>
+
+      {[
+        {
+          phase: "Phase 0 — Proof of Concept",
+          timeline: "Week 1-2",
+          color: "emerald",
+          items: [
+            "Transparent proxy that forwards to OpenAI + Anthropic + Google",
+            "Per-key hard spending caps (daily/monthly)",
+            "Basic Telegram alert on cap hit",
+            "CLI: clawguard init → generates config + starts proxy",
+            "< 5ms latency overhead verified",
+          ],
+          metric: "Demo: set a $1 cap, hit it, see it block instantly",
+        },
+        {
+          phase: "Phase 1 — OpenClaw Launch",
+          timeline: "Week 3-5",
+          color: "sky",
+          items: [
+            "OpenClaw skill package (openclaw skill install clawguard)",
+            "Anomaly detection with adaptive baselines",
+            "Loop/heartbeat detection (content fingerprinting)",
+            "Dashboard v1 (overview + keys + alerts)",
+            "Spike confirmation gate with Telegram approve/deny",
+          ],
+          metric:
+            "Ship OpenClaw skill. Target: 500 installs in first week via OpenClaw Discord + r/AI_Agents",
+        },
+        {
+          phase: "Phase 2 — Growth & Polish",
+          timeline: "Week 6-10",
+          color: "amber",
+          items: [
+            "Multi-provider support (add Bedrock, Azure OpenAI, OpenRouter)",
+            "Smart model downgrade routing",
+            "Incident report PDF generation",
+            "Automated key rotation (provider API integrations)",
+            "Budget forecasting and projections",
+            "Managed SaaS beta (Cloudflare Workers deployment)",
+          ],
+          metric:
+            "2,000 active installs. First paying SaaS customer. Launch on Product Hunt.",
+        },
+        {
+          phase: "Phase 3 — Enterprise",
+          timeline: "Quarter 2",
+          color: "violet",
+          items: [
+            "SSO/RBAC (OIDC, SAML)",
+            "Multi-team hierarchy with inherited policies",
+            "Geo-fencing and IP allowlisting",
+            "Compliance audit logs and export",
+            "Centralized key vault with scoped access",
+            "SOC2 Type II certification",
+          ],
+          metric:
+            "First enterprise contract ($5K+ ARR). 10,000 active installs.",
+        },
+      ].map((phase, i) => (
+        <Card key={i}>
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h3 className="text-white font-semibold text-sm">
+                {phase.phase}
+              </h3>
+              <Badge color={phase.color}>{phase.timeline}</Badge>
+            </div>
+          </div>
+          <div className="space-y-1.5 mb-3">
+            {phase.items.map((item, j) => (
+              <div key={j} className="flex items-start gap-2">
+                <div className="w-4 h-4 rounded border border-zinc-700 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-zinc-600" />
+                </div>
+                <span className="text-zinc-400 text-xs">{item}</span>
+              </div>
+            ))}
+          </div>
+          <div className="p-2 rounded bg-zinc-800/50 text-xs">
+            <span className="text-zinc-500">Success Metric: </span>
+            <span className="text-zinc-300">{phase.metric}</span>
+          </div>
+        </Card>
+      ))}
+
+      <Card>
+        <div className="text-zinc-500 text-xs uppercase tracking-wider mb-3">
+          Go-To-Market Channels
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            {
+              channel: "OpenClaw Ecosystem",
+              tactic:
+                "Ship as official skill on ClawHub. Feature in OpenClaw docs as recommended security tool. Partner with OpenClaw Discord mods.",
+            },
+            {
+              channel: "Reddit & HN",
+              tactic:
+                "Launch post: 'I built the guardrails the $82K poster wished existed.' Cross-post to r/googlecloud, r/AI_Agents, r/LocalLLaMA. Technical deep-dive on HN.",
+            },
+            {
+              channel: "Content Marketing",
+              tactic:
+                "'The $82K API Key Incident: How to Make Sure It Never Happens to You' — viral-format blog post with real numbers and a CTA to install ClawGuard.",
+            },
+            {
+              channel: "Dev Community",
+              tactic:
+                "Write-ups on Dev.to and Medium (where TokPinch already got traction). Comparison posts against alternatives. Open-source contribution invites.",
+            },
+          ].map((item, i) => (
+            <div key={i} className="p-3 rounded-lg bg-zinc-800/40">
+              <div className="text-white text-sm font-medium mb-1">
+                {item.channel}
+              </div>
+              <p className="text-zinc-400 text-xs leading-relaxed">
+                {item.tactic}
+              </p>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <Card className="border-emerald-500/20">
+        <div className="text-emerald-400 text-xs uppercase tracking-wider mb-2">
+          The Bottom Line
+        </div>
+        <p className="text-zinc-300 text-sm leading-relaxed">
+          The agentic AI wave (OpenClaw: 247K stars, 1.6M npm installs) is
+          creating millions of new API key users with zero security
+          infrastructure. Cloud providers won't build guardrails because runaway
+          bills are revenue. The community is already building stopgap solutions
+          (TokPinch, ClawMetry) — validating demand but leaving a gap for a
+          comprehensive, multi-provider, production-grade product. ClawGuard is
+          that product: an open-source API firewall that turns every missing
+          guardrail from the $82K incident into a shipped feature. The OpenClaw
+          skill distribution channel gives us a built-in go-to-market wedge into
+          the hottest AI developer community of 2026.
+        </p>
+      </Card>
+    </div>
+  );
+}
+
+// ─── MAIN APP ───
+
+export default function ProductSpec() {
+  const [activeSection, setActiveSection] = useState(0);
+
+  const renderSection = () => {
+    switch (activeSection) {
+      case 0:
+        return <OverviewSection />;
+      case 1:
+        return <ProblemSection />;
+      case 2:
+        return <PersonasSection />;
+      case 3:
+        return <ProductSection />;
+      case 4:
+        return <ArchitectureSection />;
+      case 5:
+        return <MilestonesSection />;
+      default:
+        return <OverviewSection />;
+    }
+  };
+
+  return (
+    <div
+      className="min-h-screen bg-zinc-950 text-zinc-300"
+      style={{
+        fontFamily: "'DM Sans', sans-serif",
+      }}
+    >
+      <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600;700&display=swap"
+        rel="stylesheet"
+      />
+
+      {/* Header */}
+      <div className="border-b border-zinc-800 bg-zinc-950/90 backdrop-blur sticky top-0 z-50">
+        <div className="max-w-4xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                <span className="text-emerald-400 text-sm font-bold">CG</span>
+              </div>
+              <div>
+                <h1
+                  className="text-white text-lg font-bold tracking-tight"
+                  style={{ fontFamily: "'DM Serif Display', serif" }}
+                >
+                  ClawGuard
+                </h1>
+                <p className="text-zinc-500 text-xs">
+                  Product Specification v1.0 — March 2026
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-1.5">
+              <Badge color="emerald">Buildable</Badge>
+              <Badge color="sky">OSS + SaaS</Badge>
+            </div>
+          </div>
+
+          {/* Nav */}
+          <div className="flex gap-1 overflow-x-auto">
+            {sections.map((section, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveSection(i)}
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all whitespace-nowrap ${
+                  i === activeSection
+                    ? "bg-emerald-500/15 text-emerald-400"
+                    : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50"
+                }`}
+              >
+                {section}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-4xl mx-auto px-6 py-8">{renderSection()}</div>
+
+      {/* Footer */}
+      <div className="border-t border-zinc-800 mt-8">
+        <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between text-zinc-600 text-xs">
+          <span>
+            ClawGuard Product Spec — Confidential Draft
+          </span>
+          <span>
+            Research basis: r/googlecloud incident, OpenClaw ecosystem analysis,
+            community cost reports
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
