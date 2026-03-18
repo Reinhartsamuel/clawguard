@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "dev": "bun src/index.ts",
-    "build": "tsup && cp -r ../proxy/dist ./dist/proxy-runtime && cp ../../README.md ./README.md"
+    "build": "tsup && bun -e \"const {cpSync}=require('fs');cpSync('../proxy/dist','./dist/proxy-runtime',{recursive:true});cpSync('../../README.md','./README.md');\""
   },
   "dependencies": {
     "@clawguard/proxy": "workspace:*"
