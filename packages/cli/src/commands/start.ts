@@ -11,6 +11,30 @@ function checkBun(): boolean {
 export async function start(args: string[]): Promise<void> {
   const noDashboard = args.includes("--no-dashboard");
 
+  // Detect compiled single-binary mode: import.meta.url starts with /$bunfs/
+  const isBinary = import.meta.url.startsWith("/$bunfs/");
+
+  if (isBinary) {
+    // Compiled binary: re-exec self with _proxy subcommand
+    const envPath = resolve(process.cwd(), ".env");
+    if (!existsSync(envPath)) {
+      console.warn("No .env found in current directory. Run: clawguard init");
+    }
+    console.log("🛡️  Starting ClawGuard proxy...");
+    if (!noDashboard) {
+      console.log("🖥️  Dashboard: http://localhost:4100/dashboard");
+    }
+    const proxy = spawn(process.execPath, ["_proxy"], {
+      stdio: "inherit",
+      env: process.env,
+    });
+    proxy.on("exit", (code) => { process.exit(code ?? 0); });
+    for (const sig of ["SIGINT", "SIGTERM"] as const) {
+      process.on(sig, () => proxy.kill(sig));
+    }
+    return;
+  }
+
   if (!checkBun()) {
     console.error("ClawGuard requires Bun runtime. Install it at https://bun.sh");
     console.error("  curl -fsSL https://bun.sh/install | bash");
