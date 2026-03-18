@@ -44,10 +44,12 @@ jobs:
 
       - name: Compile single binary
         run: |
-          bun build packages/cli/src/index.ts \
+          mkdir -p dist
+          cd packages/cli
+          bun build src/index.ts \
             --compile \
             --target ${{ matrix.bun-target }} \
-            --outfile dist/${{ matrix.artifact }}
+            --outfile ../../dist/${{ matrix.artifact }}
         shell: bash
 
       - name: Upload artifact

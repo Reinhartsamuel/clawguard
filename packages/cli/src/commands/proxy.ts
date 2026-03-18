@@ -5,12 +5,12 @@
 // This imports from @clawguard/proxy so bun build --compile bundles all proxy code
 // into the single binary at compile time.
 
-import { createApp } from "@clawguard/proxy/src/server.js";
-import { getDb } from "@clawguard/proxy/src/store/db.js";
-import { defaults } from "@clawguard/proxy/src/config/defaults.js";
-import { subscribe } from "@clawguard/proxy/src/ws/events.js";
-import type { WsEvent } from "@clawguard/proxy/src/ws/events.js";
-import { loadLivePricing } from "@clawguard/proxy/src/tokens/pricing.js";
+import { createApp } from "../../../proxy/src/server";
+import { getDb } from "../../../proxy/src/store/db";
+import { defaults } from "../../../proxy/src/config/defaults";
+import { subscribe } from "../../../proxy/src/ws/events";
+import type { WsEvent } from "../../../proxy/src/ws/events";
+import { loadLivePricing } from "../../../proxy/src/tokens/pricing";
 
 export async function _proxy(_args: string[]): Promise<void> {
   const port = Number(process.env["PORT"]) || defaults.port;
