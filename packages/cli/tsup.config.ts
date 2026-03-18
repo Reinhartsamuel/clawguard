@@ -6,6 +6,7 @@ export default defineConfig({
   target: "esnext",
   outDir: "dist",
   splitting: false,
+  external: ["bun:sqlite", "bun"],
   banner: {
     js: "#!/usr/bin/env node",
   },
