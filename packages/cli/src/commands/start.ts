@@ -11,8 +11,10 @@ function checkBun(): boolean {
 export async function start(args: string[]): Promise<void> {
   const noDashboard = args.includes("--no-dashboard");
 
-  // Detect compiled single-binary mode: import.meta.url starts with /$bunfs/
-  const isBinary = import.meta.url.startsWith("/$bunfs/");
+  // Detect compiled single-binary mode:
+  // - import.meta.url starts with /$bunfs/ (bun compiled binary virtual fs)
+  // - OR process.execPath does not contain "bun" (i.e. the binary IS clawguard, not bun)
+  const isBinary = import.meta.url.startsWith("/$bunfs/") || !process.execPath.includes("bun");
 
   if (isBinary) {
     // Compiled binary: re-exec self with _proxy subcommand
