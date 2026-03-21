@@ -39,7 +39,10 @@ export function buildUsageResult(
 
 /**
  * Extract usage from a non-streaming JSON response body.
- * OpenAI responses include: { usage: { prompt_tokens, completion_tokens, total_tokens }, model }
+ * Supports:
+ *   - OpenAI Chat Completions: { usage: { prompt_tokens, completion_tokens }, model }
+ *   - OpenAI Responses API:    { usage: { input_tokens, output_tokens }, model }
+ *   - Anthropic:               { usage: { input_tokens, output_tokens }, model }
  */
 export function parseUsageFromResponse(body: string): UsageResult | null {
   try {
@@ -48,16 +51,31 @@ export function parseUsageFromResponse(body: string): UsageResult | null {
     const usage = json["usage"] as Record<string, unknown> | undefined;
 
     if (usage && typeof usage["prompt_tokens"] === "number") {
-      // OpenAI: cache tokens live under usage.prompt_tokens_details
+      // OpenAI Chat Completions format
       const details = usage["prompt_tokens_details"] as Record<string, unknown> | undefined;
       const cacheReadTokens = typeof details?.["cached_tokens"] === "number" ? details["cached_tokens"] as number : 0;
-      // Anthropic: cache tokens at top-level of usage
       const cacheCreationTokens = typeof usage["cache_creation_input_tokens"] === "number" ? usage["cache_creation_input_tokens"] as number : 0;
       const anthropicCacheRead = typeof usage["cache_read_input_tokens"] === "number" ? usage["cache_read_input_tokens"] as number : 0;
       return buildUsageResult(
         model,
         usage["prompt_tokens"] as number,
         (usage["completion_tokens"] as number) ?? 0,
+        false,
+        cacheReadTokens + anthropicCacheRead,
+        cacheCreationTokens,
+      );
+    }
+
+    if (usage && typeof usage["input_tokens"] === "number") {
+      // OpenAI Responses API / Anthropic format
+      const details = usage["input_tokens_details"] as Record<string, unknown> | undefined;
+      const cacheReadTokens = typeof details?.["cached_tokens"] === "number" ? details["cached_tokens"] as number : 0;
+      const cacheCreationTokens = typeof usage["cache_creation_input_tokens"] === "number" ? usage["cache_creation_input_tokens"] as number : 0;
+      const anthropicCacheRead = typeof usage["cache_read_input_tokens"] === "number" ? usage["cache_read_input_tokens"] as number : 0;
+      return buildUsageResult(
+        model,
+        usage["input_tokens"] as number,
+        (usage["output_tokens"] as number) ?? 0,
         false,
         cacheReadTokens + anthropicCacheRead,
         cacheCreationTokens,
@@ -84,9 +102,11 @@ export function parseUsageFromResponse(body: string): UsageResult | null {
 }
 
 /**
- * Parse a single SSE data line for usage info.
- * OpenAI streaming final chunk: data: {"usage":{"prompt_tokens":9,"completion_tokens":12,...}}
- * Returns null if this chunk doesn't contain usage.
+ * Parse a single SSE line for usage info.
+ * Supports:
+ *   - OpenAI Chat Completions streaming: data: {"usage":{"prompt_tokens":...}}
+ *   - OpenAI Responses API streaming:    data: {"type":"response.completed","response":{"usage":{"input_tokens":...}}}
+ * Returns null if this line doesn't contain usage.
  */
 export function parseUsageFromSSEChunk(line: string): UsageResult | null {
   if (!line.startsWith("data: ")) return null;
@@ -95,6 +115,28 @@ export function parseUsageFromSSEChunk(line: string): UsageResult | null {
 
   try {
     const json = JSON.parse(payload) as Record<string, unknown>;
+
+    // OpenAI Responses API: response.completed event
+    if (json["type"] === "response.completed") {
+      const response = json["response"] as Record<string, unknown> | undefined;
+      const usage = response?.["usage"] as Record<string, unknown> | undefined;
+      const model = typeof response?.["model"] === "string" ? response["model"] as string : "unknown";
+      if (usage && typeof usage["input_tokens"] === "number") {
+        const details = usage["input_tokens_details"] as Record<string, unknown> | undefined;
+        const cacheReadTokens = typeof details?.["cached_tokens"] === "number" ? details["cached_tokens"] as number : 0;
+        return buildUsageResult(
+          model,
+          usage["input_tokens"] as number,
+          (usage["output_tokens"] as number) ?? 0,
+          false,
+          cacheReadTokens,
+          0,
+        );
+      }
+      return null;
+    }
+
+    // OpenAI Chat Completions streaming
     const usage = json["usage"] as Record<string, unknown> | undefined;
     if (!usage || typeof usage["prompt_tokens"] !== "number") return null;
 
