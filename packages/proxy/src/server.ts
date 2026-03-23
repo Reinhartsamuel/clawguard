@@ -56,8 +56,14 @@ export function createApp(db?: Database) {
   // ── Built dashboard static serving ───────────────────────────────────────
   // Serves pre-built dashboard files when running as a packaged install.
   // In dev mode, the Vite dev server handles the dashboard on port 4200 instead.
-  const __dirname = dirname(fileURLToPath(import.meta.url));
-  const dashboardDist = resolve(__dirname, "../dashboard");
+  //
+  // When running as a compiled binary, import.meta.url points into the virtual
+  // /$bunfs/ filesystem — no real files exist there. Use the real binary path instead.
+  const isBinary = import.meta.url.startsWith("/$bunfs/") || !process.execPath.includes("bun");
+  const __dirname = isBinary
+    ? dirname(process.execPath)
+    : dirname(fileURLToPath(import.meta.url));
+  const dashboardDist = resolve(__dirname, isBinary ? "dashboard" : "../dashboard");
   if (existsSync(dashboardDist)) {
     app.get("/dashboard", (c) => c.redirect("/dashboard/"));
     app.get("/dashboard/*", async (c) => {

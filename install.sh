@@ -63,10 +63,20 @@ TMP_FILE="$(mktemp)"
 $FETCH "$DOWNLOAD_URL" > "$TMP_FILE"
 chmod +x "$TMP_FILE"
 
+# ── Download dashboard assets ─────────────────────────────────────────────────
+
+DASHBOARD_URL="https://github.com/$REPO/releases/download/$LATEST_TAG/dist-dashboard.tar.gz"
+TMP_DASHBOARD="$(mktemp)"
+$FETCH "$DASHBOARD_URL" > "$TMP_DASHBOARD"
+
 # ── Install ───────────────────────────────────────────────────────────────────
 
 mkdir -p "$BIN_DIR"
 mv "$TMP_FILE" "$BIN_DIR/$BIN_NAME"
+
+# Extract dashboard assets next to the binary
+tar -xzf "$TMP_DASHBOARD" -C "$BIN_DIR"
+rm "$TMP_DASHBOARD"
 
 echo ""
 echo "✅ ClawGuard $LATEST_TAG installed to $BIN_DIR/$BIN_NAME"
