@@ -11,6 +11,7 @@ export default defineConfig({
       "/cg-ws": { target: "ws://localhost:4100", ws: true, rewrite: (path) => path.replace(/^\/cg-ws/, "/ws") },
     },
   },
+  base: "/dashboard/",
   build: {
     // Output to proxy package so it can be served as static files in packaged installs.
     // The proxy checks for this directory at startup and serves it at /dashboard/*.
