@@ -1,6 +1,6 @@
 {
   "name": "@reinhartsamuel/clawguard",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Transparent API proxy and firewall for AI spending — budget caps, anomaly detection, loop prevention",
   "license": "MIT",
   "homepage": "https://clawguard.dev",

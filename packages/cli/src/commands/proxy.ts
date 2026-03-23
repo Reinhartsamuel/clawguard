@@ -31,7 +31,7 @@ export async function _proxy(_args: string[]): Promise<void> {
     port,
     fetch: async (req, server) => {
       const url = new URL(req.url);
-      if (url.pathname === "/ws") {
+      if (url.pathname === "/ws" || url.pathname === "/cg-ws") {
         const upgraded = server.upgrade(req);
         if (upgraded) return undefined as unknown as Response;
         return new Response("WebSocket upgrade failed", { status: 400 });
